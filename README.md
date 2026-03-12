@@ -42,7 +42,7 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Valijon21/Python_questions.git
+git clone https://github.com/Valijon21/Python_questions_app.git
 cd Python_questions/django_project
 ```
 
