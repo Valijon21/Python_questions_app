@@ -36,19 +36,32 @@ def evaluate_answers(request):
     answers = request.data.get('answers', {})
     questions = request.data.get('questions', [])
     
-    if not HAS_GENAI or not os.getenv('GEMINI_API_KEY'):
+    # Force reload of environment variables if not found (sometimes needed in dev)
+    api_key = os.getenv('GEMINI_API_KEY')
+    if not api_key:
+        from dotenv import load_dotenv
+        load_dotenv()
+        api_key = os.getenv('GEMINI_API_KEY')
+
+    if not HAS_GENAI or not api_key:
         # Fallback if genai is not installed or no API key is provided
         return Response({
             "level": "Middle (Mocked)",
             "summary": "Gemini AI API key not found or library missing. Returning mock evaluation.",
             "feedback": [
-                {"questionId": q.get('id'), "isCorrect": False, "aiFeedback": "Mock feedback: " + answers.get(str(q.get('id')), "No answer.")} 
+                {
+                    "questionId": q.get('id'), 
+                    "isCorrect": False, 
+                    "aiFeedback": "Mock feedback: " + answers.get(str(q.get('id')), "No answer."),
+                    "correctAnswer": "This is a mock correct answer. Please configure your GEMINI_API_KEY to see real AI-generated model answers."
+                } 
                 for q in questions
             ]
         })
 
-    genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-    model = genai.GenerativeModel("gemini-2.5-pro")
+    genai.configure(api_key=api_key)
+    # Using gemini-flash-latest as it is the most stable and available in this environment
+    model = genai.GenerativeModel("gemini-flash-latest")
     
     prompt = f"You are an expert strict technical interviewer evaluating {len(questions)} Python Backend interview answers in {language}. Provide the assessment strictly in JSON format.\n"
     prompt += "Be extremely strict and critical. If the user provides random letters (e.g., 'asdfasdf'), completely incorrect answers, or avoids the question, immediately classify their level as 'Trainee' or 'Fail', and provide harsh but professional feedback.\n"
@@ -56,9 +69,10 @@ def evaluate_answers(request):
     prompt += '  "level": "Trainee | Junior | Middle | Senior",\n'
     prompt += '  "summary": "Overall synthesis and strict feedback string in the requested language. Explicitly mention if they guessed or wrote random characters.",\n'
     prompt += '  "feedback": [\n'
-    prompt += '    { "questionId": 123, "isCorrect": true, "aiFeedback": "Specific feedback for this answer in the requested language. Be brutally honest if it is wrong." }\n'
+    prompt += '    { "questionId": 123, "isCorrect": true, "aiFeedback": "Specific feedback for this answer in the requested language. Be brutally honest if it is wrong.", "correctAnswer": "A clear, concise model answer to this question in the requested language (2-4 sentences)." }\n'
     prompt += "  ]\n}\n\n"
     prompt += "For isCorrect: set it to true only if the answer is substantially correct and demonstrates real understanding. Set it to false for wrong, random, empty, or vague answers.\n"
+    prompt += "For correctAnswer: always provide the ideal answer regardless of whether the user was correct or not. This helps them learn.\n"
     prompt += "Here are the questions and user's answers:\n"
     
     for q in questions:

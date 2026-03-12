@@ -12,14 +12,16 @@
 
 ## ✨ Features
 
-- 🎯 **AI Evaluation** — Google Gemini 2.5 Pro evaluates your answers with real-time feedback
+- 🎯 **AI Evaluation** — Google Gemini AI evaluates your answers with real-time feedback
+- 💡 **Ideal Answers** — See the `IDEAL JAVOB (NAMUNA)` for every question to learn from your mistakes
+- 📈 **Interviewer Analysis** — Get professional `INTERVYUER TAHLILI` for each response
 - 📊 **Smart Scoring** — Get graded as `Trainee`, `Junior`, `Middle`, or `Senior`
 - 📈 **Answer Statistics** — See how many answers were ✅ correct vs ❌ wrong with a progress bar
 - 🌐 **3 Languages** — Full support for Uzbek 🇺🇿, Russian 🇷🇺, and English 🇬🇧
 - 💾 **SQLite Database** — 1000+ curated questions stored locally, no external DB needed
 - 🔧 **Admin Panel** — Add, edit, or remove questions directly from Django Admin
-- ⏹️ **Cancel & Review** — Stop anytime and still see feedback on answered questions with motivational messages
-- 📱 **Responsive UI** — Modern dark-themed design built with Tailwind CSS
+- ⏹️ **Cancel & Review** — Stop anytime and still see feedback on answered questions
+- 📱 **Responsive UI** — Modern, compact, dark-themed design built with Tailwind CSS
 
 ---
 
@@ -28,7 +30,7 @@
 | Layer     | Technology                            |
 |-----------|---------------------------------------|
 | Backend   | Python 3.11+, Django 5.2, Django REST Framework |
-| AI        | Google Gemini 2.5 Pro API             |
+| AI        | Google Gemini AI (`gemini-flash-latest`) |
 | Frontend  | Vanilla JavaScript, HTML, Tailwind CSS, Lucide Icons |
 | Database  | SQLite (built-in, no setup required)  |
 
@@ -117,6 +119,43 @@ django_project/
 
 ---
 
+## 🛠️ Core Codebase Overview
+
+### 1. Database Model (`api/models.py`)
+The `Question` model handles multi-language support (Uzbek, English, Russian) for each interview question.
+
+```python
+class Question(models.Model):
+    text_uz = models.TextField(verbose_name="Question in Uzbek", blank=True, null=True)
+    text_en = models.TextField(verbose_name="Question in English", blank=True, null=True)
+    text_ru = models.TextField(verbose_name="Question in Russian", blank=True, null=True)
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "text": {"uz": self.text_uz, "en": self.text_en, "ru": self.text_ru}
+        }
+```
+
+### 2. AI Evaluation Logic (`api/views.py`)
+Integrated with **Google Gemini AI (`gemini-flash-latest`)**, the backend sends a strict system prompt to evaluate user answers and determine their seniority level.
+
+```python
+@api_view(['POST'])
+def evaluate_answers(request):
+    # ... extraction logic ...
+    model = genai.GenerativeModel("gemini-flash-latest")
+    prompt = f"You are an expert strict technical interviewer evaluating Python Backend interview answers..."
+    response = model.generate_content(prompt)
+    result = json.loads(response.text)
+    return Response(result)
+```
+
+### 3. Frontend SPA (`templates/index.html`)
+A modern, dark-themed Single Page Application built with **Vanilla JavaScript** and **Tailwind CSS**. It manages state for the interview flow, timer, and AI evaluation display.
+
+---
+
 ## 🔑 Admin Panel
 
 Access the admin panel at **http://127.0.0.1:8000/admin**
@@ -160,7 +199,8 @@ From the admin panel you can:
     {
       "questionId": 1,
       "isCorrect": true,
-      "aiFeedback": "To'g'ri, lekin lazy evaluation haqida ham eslatish kerak edi."
+      "aiFeedback": "To'g'ri, lekin lazy evaluation haqida ham eslatish kerak edi.",
+      "correctAnswer": "Django ORM lazy evaluation usulida ishlaydi, ya'ni so'rov faqat ma'lumot kerak bo'lganda bazaga yuboriladi."
     }
   ]
 }
