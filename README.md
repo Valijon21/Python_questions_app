@@ -101,59 +101,37 @@ Open your browser at **http://127.0.0.1:8000** 🎉
 ```
 django_project/
 ├── api/
-│   ├── admin.py        # Question admin panel configuration
-│   ├── apps.py         # App configuration
-│   ├── models.py       # Question model (uz/en/ru translations)
-│   ├── urls.py         # API URL routing
-│   ├── views.py        # API views + Gemini AI integration
-│   └── migrations/     # Database migrations
-├── mock_interviewer/
-│   ├── settings.py     # Django project settings
-│   ├── urls.py         # Root URL configuration
-│   ├── wsgi.py         # WSGI entry point
-│   └── asgi.py         # ASGI entry point
+│   ├── static/api/
+│   │   ├── css/main.css      # Professional styles & animations
+│   │   └── js/
+│   │       ├── api.js        # Server communication (Fetch)
+│   │       ├── main.js       # App entry point
+│   │       ├── state.js      # Global state management
+│   │       ├── translations.js # Dictionary management
+│   │       └── ui.js         # Rendering engine
+│   ├── serializers.py        # DRF Serializers (Enterprise Grade)
+│   ├── services.py           # Gemini AI Service Layer
+│   ├── models.py             # Question model
+│   ├── urls.py               # API routing
+│   └── views.py              # Clean/Thin Request handlers
 ├── templates/
-│   └── index.html      # Full frontend (SPA)
-├── db.sqlite3          # SQLite database with 1000+ questions
-└── manage.py           # Django management utility
+│   └── index.html            # Clean entry point (SPA)
+├── db.sqlite3                # 1000+ questions
+└── manage.py                 # Django utility
 ```
 
 ---
 
 ## 🛠️ Core Codebase Overview
 
-### 1. Database Model (`api/models.py`)
-The `Question` model handles multi-language support (Uzbek, English, Russian) for each interview question.
+### 1. Backend: Service Layer & Serializers
+We use a **Service Layer** (`api/services.py`) to decouple business logic (AI prompt engineering) from the views. **Serializers** (`api/serializers.py`) ensure that API data is validated and formatted according to industry standards.
 
-```python
-class Question(models.Model):
-    text_uz = models.TextField(verbose_name="Question in Uzbek", blank=True, null=True)
-    text_en = models.TextField(verbose_name="Question in English", blank=True, null=True)
-    text_ru = models.TextField(verbose_name="Question in Russian", blank=True, null=True)
-    
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "text": {"uz": self.text_uz, "en": self.text_en, "ru": self.text_ru}
-        }
-```
+### 2. Frontend: Modular ES Modules
+Instead of a monolithic script, we use **ES Modules** to split the frontend logic into specialized parts. This ensures the application is scalable, maintainable, and utilizes browser caching effectively.
 
-### 2. AI Evaluation Logic (`api/views.py`)
-Integrated with **Google Gemini AI (`gemini-flash-latest`)**, the backend sends a strict system prompt to evaluate user answers and determine their seniority level.
-
-```python
-@api_view(['POST'])
-def evaluate_answers(request):
-    # ... extraction logic ...
-    model = genai.GenerativeModel("gemini-flash-latest")
-    prompt = f"You are an expert strict technical interviewer evaluating Python Backend interview answers..."
-    response = model.generate_content(prompt)
-    result = json.loads(response.text)
-    return Response(result)
-```
-
-### 3. Frontend SPA (`templates/index.html`)
-A modern, dark-themed Single Page Application built with **Vanilla JavaScript** and **Tailwind CSS**. It manages state for the interview flow, timer, and AI evaluation display.
+### 3. Navigation Engine
+The logic in `ui.js` handles complex state transitions (Landing ↔ Topics ↔ Interview ↔ Results) with smart "Back" button functionality that remembers user paths.
 
 ---
 
