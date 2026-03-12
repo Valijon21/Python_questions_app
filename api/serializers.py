@@ -6,14 +6,25 @@ class QuestionSerializer(serializers.ModelSerializer):
     Serializer for Question model to handle data representation consistently.
     """
     text = serializers.SerializerMethodField()
+    answers = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        fields = ['id', 'text', 'category']
+        fields = ['id', 'text', 'category', 'answers']
 
     def get_text(self, obj):
-        # Already handled by model's to_dict, but here we standardize it
-        return obj.text
+        return {
+            "uz": obj.text_uz,
+            "en": obj.text_en,
+            "ru": obj.text_ru
+        }
+
+    def get_answers(self, obj):
+        return {
+            "uz": obj.answer_uz,
+            "en": obj.answer_en,
+            "ru": obj.answer_ru
+        }
 
 class CategorySerializer(serializers.Serializer):
     """

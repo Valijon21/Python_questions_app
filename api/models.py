@@ -6,6 +6,10 @@ class Question(models.Model):
     text_en = models.TextField(verbose_name="Question in English", blank=True, null=True)
     text_ru = models.TextField(verbose_name="Question in Russian", blank=True, null=True)
     
+    answer_uz = models.TextField(verbose_name="Answer in Uzbek", blank=True, null=True)
+    answer_en = models.TextField(verbose_name="Answer in English", blank=True, null=True)
+    answer_ru = models.TextField(verbose_name="Answer in Russian", blank=True, null=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

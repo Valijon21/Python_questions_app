@@ -150,7 +150,8 @@ function renderLanding() {
 function renderTopics() {
     const icons = {
         'python_core': 'terminal', 'python_advanced': 'python', 'async': 'zap',
-        'database': 'database', 'django': 'globe', 'others': 'box'
+        'database': 'database', 'django': 'globe', 'others': 'box',
+        'python_functions': 'code', 'python_control_flow': 'repeat'
     };
     const colors = {
         'python_core': 'text-blue-400 bg-blue-500/10 border-blue-500/20',
@@ -158,7 +159,9 @@ function renderTopics() {
         'async': 'text-amber-400 bg-amber-500/10 border-amber-500/20',
         'database': 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
         'django': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-        'others': 'text-slate-400 bg-slate-500/10 border-slate-500/20'
+        'others': 'text-slate-400 bg-slate-500/10 border-slate-500/20',
+        'python_functions': 'text-pink-400 bg-pink-500/10 border-pink-500/20',
+        'python_control_flow': 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20'
     };
 
     return `
