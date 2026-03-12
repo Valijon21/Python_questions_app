@@ -1,6 +1,7 @@
 import json
 import random
 import os
+from django.db import models
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
@@ -16,18 +17,29 @@ from api.models import Question
 
 @api_view(['GET'])
 def get_questions(request):
+    category = request.GET.get('category')
     try:
         count = int(request.GET.get('count', 25))
     except ValueError:
         count = 25
     
-    # Get random 'count' questions from the database
-    # For large databases order_by('?') can be slow, but for mock interviewer it works perfectly
-    random_questions = Question.objects.order_by('?')[:count]
+    # Filter by category if provided
+    query = Question.objects.all()
+    if category:
+        query = query.filter(category=category)
+    
+    # Get random 'count' questions
+    random_questions = query.order_by('?')[:count]
     
     # Convert queryset to list of dicts expecting the same format as before
     response_data = [q.to_dict() for q in random_questions]
     return Response(response_data)
+
+@api_view(['GET'])
+def get_categories(request):
+    # Get unique categories and their question counts
+    categories = Question.objects.values('category').annotate(count=models.Count('id')).order_by('category')
+    return Response(list(categories))
 
 @csrf_exempt
 @api_view(['POST'])

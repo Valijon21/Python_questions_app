@@ -13,15 +13,16 @@
 ## ✨ Features
 
 - 🎯 **AI Evaluation** — Google Gemini AI evaluates your answers with real-time feedback
+- 📂 **Mavzular (Technical Domains)** — Focus your interview on specific areas: `Python Core`, `Django & Web`, `Databases`, `Async`, and more
 - 💡 **Ideal Answers** — See the `IDEAL JAVOB (NAMUNA)` for every question to learn from your mistakes
 - 📈 **Interviewer Analysis** — Get professional `INTERVYUER TAHLILI` for each response
 - 📊 **Smart Scoring** — Get graded as `Trainee`, `Junior`, `Middle`, or `Senior`
 - 📈 **Answer Statistics** — See how many answers were ✅ correct vs ❌ wrong with a progress bar
 - 🌐 **3 Languages** — Full support for Uzbek 🇺🇿, Russian 🇷🇺, and English 🇬🇧
-- 💾 **SQLite Database** — 1000+ curated questions stored locally, no external DB needed
+- 💾 **SQLite Database** — 1000+ curated questions stored locally
 - 🔧 **Admin Panel** — Add, edit, or remove questions directly from Django Admin
 - ⏹️ **Cancel & Review** — Stop anytime and still see feedback on answered questions
-- 📱 **Responsive UI** — Modern, compact, dark-themed design built with Tailwind CSS
+- 📱 **Responsive UI** — Modern dark-themed design built with Tailwind CSS
 
 ---
 
@@ -172,7 +173,8 @@ From the admin panel you can:
 
 | Method | Endpoint        | Description                                      |
 |--------|-----------------|--------------------------------------------------|
-| GET    | `/api/questions?count=25` | Returns N random questions from the database |
+| GET    | `/api/questions?count=25&category=Slug` | Returns random questions, optionally filtered by category |
+| GET    | `/api/categories` | Returns all available technical domains and question counts |
 | POST   | `/api/evaluate`           | Submits answers to be evaluated by Gemini AI |
 
 ### Example POST `/api/evaluate`
