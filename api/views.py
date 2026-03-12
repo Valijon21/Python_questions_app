@@ -38,8 +38,23 @@ def get_questions(request):
 @api_view(['GET'])
 def get_categories(request):
     # Get unique categories and their question counts
-    categories = Question.objects.values('category').annotate(count=models.Count('id')).order_by('category')
-    return Response(list(categories))
+    categories_query = Question.objects.values('category').annotate(count=models.Count('id'))
+    
+    # User defined order
+    order_map = {
+        'python_core': 0,
+        'python_advanced': 1,
+        'async': 2,
+        'database': 3,
+        'django': 4,
+        'others': 5
+    }
+    
+    # Fetch data and sort it
+    categories_list = list(categories_query)
+    categories_list.sort(key=lambda x: order_map.get(x['category'], 999))
+    
+    return Response(categories_list)
 
 @csrf_exempt
 @api_view(['POST'])
