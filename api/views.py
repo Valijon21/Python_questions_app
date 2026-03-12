@@ -48,7 +48,7 @@ def evaluate_answers(request):
         })
 
     genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.5-pro")
     
     prompt = f"You are an expert strict technical interviewer evaluating {len(questions)} Python Backend interview answers in {language}. Provide the assessment strictly in JSON format.\n"
     prompt += "Be extremely strict and critical. If the user provides random letters (e.g., 'asdfasdf'), completely incorrect answers, or avoids the question, immediately classify their level as 'Trainee' or 'Fail', and provide harsh but professional feedback.\n"

@@ -5,14 +5,14 @@
 
 ![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-5.2-green?logo=django&logoColor=white)
-![Gemini AI](https://img.shields.io/badge/Gemini_AI-1.5_Flash-orange?logo=google&logoColor=white)
+![Gemini AI](https://img.shields.io/badge/Gemini_AI-2.5_Pro-orange?logo=google&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
 ## ✨ Features
 
-- 🎯 **AI Evaluation** — Google Gemini 1.5 Flash evaluates your answers with real-time feedback
+- 🎯 **AI Evaluation** — Google Gemini 2.5 Pro evaluates your answers with real-time feedback
 - 📊 **Smart Scoring** — Get graded as `Trainee`, `Junior`, `Middle`, or `Senior`
 - 📈 **Answer Statistics** — See how many answers were ✅ correct vs ❌ wrong with a progress bar
 - 🌐 **3 Languages** — Full support for Uzbek 🇺🇿, Russian 🇷🇺, and English 🇬🇧
@@ -28,7 +28,7 @@
 | Layer     | Technology                            |
 |-----------|---------------------------------------|
 | Backend   | Python 3.11+, Django 5.2, Django REST Framework |
-| AI        | Google Gemini 1.5 Flash API           |
+| AI        | Google Gemini 2.5 Pro API             |
 | Frontend  | Vanilla JavaScript, HTML, Tailwind CSS, Lucide Icons |
 | Database  | SQLite (built-in, no setup required)  |
 
@@ -39,8 +39,8 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone <repo-url>
-cd django_project
+git clone https://github.com/Valijon21/Python_questions.git
+cd Python_questions/django_project
 ```
 
 ### 2. Create a Virtual Environment
@@ -182,4 +182,20 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-<p align="center">Built with ❤️ for Python backend developers</p>
+## 👨‍💻 Developer
+
+<table>
+  <tr>
+    <td align="center">
+      <b>Valijon Ergashev</b><br/>
+      <i>Python Backend Developer</i><br/><br/>
+      <a href="https://github.com/Valijon21">🐙 GitHub</a>
+    </td>
+  </tr>
+</table>
+
+> 💡 This project was built as a personal tool to help Python backend developers practice and prepare for real technical interviews.
+
+---
+
+<p align="center">Built with ❤️ by <strong>Valijon Ergashev</strong> — for Python backend developers everywhere</p>
